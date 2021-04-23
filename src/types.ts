@@ -17,7 +17,7 @@ export type OrderCommonInfo = {
   title: string;
   date: Date;
   currency: {
-    name: string;
+    code: string;
     rate: number;
   };
   parcelCost: number;
@@ -31,7 +31,8 @@ export interface Store {
   personalOrders: PersonalOrder[];
 
   setOrderTitle(title: string): void;
-  setCurrency(currency: { name?: string; rate?: number }): void;
+  setCurrencyCode(code: string): void;
+  setCurrencyRate(rate: number): void;
   setParcelCost(parcelCost: number): void;
   setDeliveryCost(deliveryCost: number): void;
   setGeneralCostInBYN(costInBYN: number): void;

@@ -2,7 +2,7 @@ import React, { ChangeEvent, FC, useState } from 'react';
 import { useAppStore } from 'store/appContext';
 import { Button } from 'generalStyled';
 import { COLOR_BLUE, COLOR_PINK, ROUNDING_COEFFICIENT } from 'appConstants';
-import { getCurrencyByCode } from 'servises/currencyAPI';
+import { getCurrencyByCode } from 'services/currencyAPI';
 import { useObserver } from 'mobx-react-lite';
 import {
   CurrencyInput,
@@ -27,26 +27,29 @@ export const Currency: FC<ParcelCostProps> = () => {
       Math.floor(
         (store.orderInfo.generalCostInBYN / sum) * ROUNDING_COEFFICIENT
       ) / ROUNDING_COEFFICIENT;
-    store.setCurrency({ rate: rateCur });
+    store.setCurrencyRate(rateCur);
   };
 
-  const getCurrencyByAPI = async () => {
+  const getCurrencyRateByAPI = async () => {
     try {
-      let rateCur = await getCurrencyByCode(store.orderInfo.currency.name);
+      let rateCur = await getCurrencyByCode(store.orderInfo.currency.code);
       rateCur =
         Math.floor(rateCur * ROUNDING_COEFFICIENT) / ROUNDING_COEFFICIENT;
-      store.setCurrency({ rate: rateCur });
+      store.setCurrencyRate(rateCur);
       setError('');
     } catch (e) {
       setError('Курс не обновлен. Проверьте абревиатуру валюты.');
     }
   };
 
-  const onChangeHandle = (event: ChangeEvent<HTMLInputElement>) => {
+  const onChangeCurrencyInputHandle = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
     const { value } = event.target;
     const regEx = new RegExp(/^[a-zA-Z]+$/);
-    if (regEx.test(value)) {
-      store.setCurrency({ name: value.toUpperCase() });
+    if (regEx.test(value) || value === '') {
+      const code = value.toUpperCase();
+      store.setCurrencyCode(code);
     }
   };
 
@@ -54,13 +57,13 @@ export const Currency: FC<ParcelCostProps> = () => {
     <CurrencyWrapper>
       Валюта магазина
       <CurrencyInput
-        value={store.orderInfo.currency.name || ''}
-        onChange={onChangeHandle}
+        value={store.orderInfo.currency.code}
+        onChange={onChangeCurrencyInputHandle}
       />
       Курс
       <CurrencyRate>{store.orderInfo.currency.rate}</CurrencyRate>
       <ButtonBlock>
-        <Button color={COLOR_PINK} onClick={() => getCurrencyByAPI()}>
+        <Button color={COLOR_PINK} onClick={() => getCurrencyRateByAPI()}>
           Получить
         </Button>
         <Button color={COLOR_BLUE} onClick={() => calculateRate()}>

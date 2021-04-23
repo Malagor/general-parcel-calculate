@@ -5,7 +5,7 @@ const orderInfo: OrderCommonInfo = {
   date: new Date(),
   title: 'Посылка с Буквавуда',
   currency: {
-    name: '',
+    code: '',
     rate: 0,
   },
   parcelCost: 0,
@@ -22,13 +22,11 @@ export function createAppStore(): Store {
     setOrderTitle(title: string) {
       this.orderInfo.title = title;
     },
-
-    setCurrency(currency: { name?: string; rate?: number }): void {
-      const { name, rate } = currency;
-      this.orderInfo.currency = {
-        rate: rate || this.orderInfo.currency.rate,
-        name: name || this.orderInfo.currency.name,
-      };
+    setCurrencyCode(code: string): void {
+      this.orderInfo.currency.code = code;
+    },
+    setCurrencyRate(rate: number): void {
+      this.orderInfo.currency.rate = rate;
     },
     setParcelCost(parcelCost: number): void {
       this.orderInfo.parcelCost = parcelCost;
