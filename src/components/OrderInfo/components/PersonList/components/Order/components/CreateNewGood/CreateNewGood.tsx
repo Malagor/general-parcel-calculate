@@ -15,67 +15,72 @@ import {
 
 type CreateNewGoodProps = {
   orderId: string;
+  onCreate: () => void;
 };
 
-export const CreateNewGood: FC<CreateNewGoodProps> = observer(({ orderId }) => {
-  const [title, setTitle] = useState('');
-  const [link, setLink] = useState('');
-  const [price, setPrice] = useState(0);
-  const [count, setCount] = useState(0);
+export const CreateNewGood: FC<CreateNewGoodProps> = observer(
+  ({ orderId, onCreate }) => {
+    const [title, setTitle] = useState('');
+    const [link, setLink] = useState('');
+    const [price, setPrice] = useState(0);
+    const [count, setCount] = useState(0);
 
-  const titleRef: RefObject<HTMLInputElement> = useRef(null);
+    const titleRef: RefObject<HTMLInputElement> = useRef(null);
 
-  const onAddGoodHandle = () => {
-    if (title && price && count) {
-      const good: Good = {
-        count,
-        id: nanoid(),
-        link,
-        price,
-        title,
-      };
-      store.addGood(orderId, good);
-      setCount(0);
-      setPrice(0);
-      setTitle('');
-      setLink('');
+    const onAddGoodHandle = () => {
+      if (title && price && count) {
+        const good: Good = {
+          count,
+          id: nanoid(),
+          link,
+          price,
+          title,
+        };
+        store.addGood(orderId, good);
+        store.calculateParcelTotalCost();
+        onCreate();
 
-      if (titleRef && titleRef.current) {
-        titleRef.current.focus();
+        setCount(0);
+        setPrice(0);
+        setTitle('');
+        setLink('');
+        if (titleRef && titleRef.current) {
+          titleRef.current.focus();
+        }
       }
-    }
-  };
+    };
 
-  return (
-    <NewGoodWrapper>
-      <TitleInput
-        ref={titleRef}
-        type="text"
-        value={title}
-        placeholder="Название"
-        onChange={(e) => setTitle(e.target.value)}
-      />
-      <LinkInput
-        type="text"
-        value={link}
-        placeholder="Ссылка"
-        onChange={(e) => setLink(e.target.value)}
-      />
-      <PriceInput
-        type="text"
-        value={price}
-        placeholder="Цена"
-        onChange={(e) => setPrice(+e.target.value)}
-      />
-      <CountInput
-        type="text"
-        value={count}
-        placeholder="Количество"
-        onChange={(e) => setCount(+e.target.value)}
-      />
-      <Button onClick={() => onAddGoodHandle()} color={COLOR_BLUE}>
-        +
-      </Button>
-    </NewGoodWrapper>
-  );
-});
+    return (
+      <NewGoodWrapper>
+        <TitleInput
+          ref={titleRef}
+          type="text"
+          value={title}
+          placeholder="Название"
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <LinkInput
+          type="text"
+          value={link}
+          placeholder="Ссылка"
+          onChange={(e) => setLink(e.target.value)}
+        />
+        <PriceInput
+          type="text"
+          value={price}
+          placeholder="Цена"
+          onChange={(e) => setPrice(+e.target.value)}
+        />
+        <CountInput
+          type="text"
+          value={count}
+          placeholder="Количество"
+          onChange={(e) => setCount(+e.target.value)}
+        />
+        <Button onClick={() => onAddGoodHandle()} color={COLOR_BLUE}>
+          +
+        </Button>
+      </NewGoodWrapper>
+    );
+  }
+);

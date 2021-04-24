@@ -103,6 +103,16 @@ class OrderStore {
     this.orderInfo.parcelCost = parcelCost;
   }
 
+  calculateParcelTotalCost(): void {
+    const totalSum = this.personalOrders.reduce(
+      (orderSum, order) =>
+        orderSum +
+        order.goods.reduce((sum, good) => sum + good.price * good.count, 0),
+      0
+    );
+    this.setParcelCost(totalSum);
+  }
+
   setDeliveryCost(deliveryCost: number): void {
     this.orderInfo.deliveryCost = deliveryCost;
   }
@@ -118,6 +128,12 @@ class OrderStore {
 
   deletePerson(orderId: string) {
     this.personalOrders = this.personalOrders.filter((p) => p.id !== orderId);
+  }
+
+  toggleDelivery(orderId: string) {
+    this.personalOrders = this.personalOrders.map((order) =>
+      order.id === orderId ? { ...order, isDelivery: !order.isDelivery } : order
+    );
   }
 
   addGood(orderId: string, good: Good) {

@@ -12,8 +12,18 @@ export const OrderHeader = styled.div`
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  align-items: flex-start;
 `;
 
 export const OrderList = styled.div`
   width: 100%;
+`;
+
+export const DeliveryCheckbox = styled.input.attrs(() => ({
+  type: 'checkbox',
+}))``;
+
+export const TotalPrice = styled.div`
+  width: 50px;
+  display: inline-block;
 `;

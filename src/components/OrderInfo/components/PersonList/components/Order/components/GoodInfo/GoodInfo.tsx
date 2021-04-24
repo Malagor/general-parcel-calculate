@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useCallback } from 'react';
 import { Good } from 'types';
 import { Button } from 'generalStyled';
 import store from 'store/OrderStore';
@@ -14,16 +14,26 @@ import {
 type GoodInfoProps = {
   item: Good;
   orderId: string;
+  onDelete: () => void;
 };
 
-export const GoodInfo: FC<GoodInfoProps> = observer(({ orderId, item }) => (
-  <GoodInfoWrapper>
-    <GoodTitle>{item.title}</GoodTitle>
-    <GoodLink href={item.link} target="_blank">
-      {item.link}
-    </GoodLink>
-    <GoodPrice>{item.price}</GoodPrice>
-    <GoodCount>{item.count}</GoodCount>
-    <Button onClick={() => store.deleteGood(orderId, item.id)}>-</Button>
-  </GoodInfoWrapper>
-));
+export const GoodInfo: FC<GoodInfoProps> = observer(
+  ({ orderId, item, onDelete }) => {
+    const onDeleteHandle = useCallback(() => {
+      store.deleteGood(orderId, item.id);
+      onDelete();
+    }, [onDelete, item.id, orderId]);
+
+    return (
+      <GoodInfoWrapper>
+        <GoodTitle>{item.title}</GoodTitle>
+        <GoodLink href={item.link} target="_blank">
+          {item.link}
+        </GoodLink>
+        <GoodPrice>{item.price}</GoodPrice>
+        <GoodCount>{item.count}</GoodCount>
+        <Button onClick={() => onDeleteHandle()}>-</Button>
+      </GoodInfoWrapper>
+    );
+  }
+);

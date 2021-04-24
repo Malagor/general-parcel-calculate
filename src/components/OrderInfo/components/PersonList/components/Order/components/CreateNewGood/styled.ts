@@ -6,18 +6,26 @@ export const NewGoodWrapper = styled.div`
   width: 100%;
 `;
 
-export const TitleInput = styled.input`
+export const TitleInput = styled.input.attrs(() => ({
+  type: 'text',
+}))`
   width: 40%;
 `;
 
-export const LinkInput = styled.input`
+export const LinkInput = styled.input.attrs(() => ({
+  type: 'text',
+}))`
   width: 40%;
 `;
 
-export const PriceInput = styled.input`
+export const PriceInput = styled.input.attrs(() => ({
+  type: 'text',
+}))`
   width: 10%;
 `;
 
-export const CountInput = styled.input`
+export const CountInput = styled.input.attrs(() => ({
+  type: 'text',
+}))`
   width: 10%;
 `;

@@ -12,14 +12,21 @@ import {
   PersonList,
 } from './components';
 
-export const OrderInfo: FC = observer(() => (
-  <OrderWrapper>
-    <OrderTitle />
-    <OrderDate data={store.orderInfo.date} />
-    <Currency />
-    <ParcelCost />
-    <DeliveryCost />
-    <BYNCost />
-    <PersonList />
-  </OrderWrapper>
-));
+export const OrderInfo: FC = observer(() => {
+  store.calculateParcelTotalCost();
+  return (
+    <OrderWrapper>
+      <OrderTitle />
+      <OrderDate data={store.orderInfo.date} />
+      <Currency />
+      <ParcelCost
+        currency={store.orderInfo.currency.code}
+        // cost={countTotalParcelCost(store.personalOrders)}
+        cost={store.orderInfo.parcelCost}
+      />
+      <DeliveryCost />
+      <BYNCost />
+      <PersonList />
+    </OrderWrapper>
+  );
+});

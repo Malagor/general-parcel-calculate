@@ -6,6 +6,6 @@ export const ParcelWrapper = styled.div`
   gap: 20px;
 `;
 
-export const ParcelInput = styled.input`
+export const Cost = styled.div`
   width: 50px;
 `;
