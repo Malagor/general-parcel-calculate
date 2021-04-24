@@ -8,15 +8,15 @@ const AppContext = createContext<Store>({
   orderInfo: {
     date: new Date(),
     title: '',
-    currency: { name: '', rate: 0 },
+    currency: { code: '', rate: 0 },
     deliveryCost: 0,
     generalCostInBYN: 0,
     parcelCost: 0,
   },
   personalOrders: [],
   setOrderTitle(title: string): void {},
-  setCurrency(currency: { name?: string; rate?: number }): void {},
-
+  setCurrencyCode(code: string): void {},
+  setCurrencyRate(rate: number): void {},
   setParcelCost(parcelCost: number): void {},
   setDeliveryCost(deliveryCost: number): void {},
   setGeneralCostInBYN(costInBYN: number): void {},

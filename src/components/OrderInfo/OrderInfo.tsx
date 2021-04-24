@@ -9,11 +9,10 @@ import {
   DeliveryCost,
   Currency,
   BYNCost,
+  PersonList,
 } from './components';
 
-type OrderInfoProps = {};
-
-export const OrderInfo: FC<OrderInfoProps> = () => {
+export const OrderInfo: FC = () => {
   const { orderInfo } = useAppStore();
 
   return useObserver(() => (
@@ -24,6 +23,7 @@ export const OrderInfo: FC<OrderInfoProps> = () => {
       <ParcelCost />
       <DeliveryCost />
       <BYNCost />
+      <PersonList />
     </OrderWrapper>
   ));
 };

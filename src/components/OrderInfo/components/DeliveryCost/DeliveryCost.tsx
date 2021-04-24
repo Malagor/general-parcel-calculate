@@ -24,7 +24,7 @@ export const DeliveryCost: FC<ParcelCostProps> = () => {
         value={store.orderInfo?.deliveryCost || ''}
         onChange={onChangeHandler}
       />
-      <div>{store.orderInfo.currency.name}</div>
+      <div>{store.orderInfo.currency.code}</div>
     </DeliveryWrapper>
   ));
 };

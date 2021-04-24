@@ -1,17 +1,17 @@
 export type Good = {
-  id?: string;
+  id: string;
   title: string;
   link: string;
   price: number;
   count: number;
 };
 
-export type PersonalOrder = {
-  id?: string;
+export interface PersonalOrder {
+  id: string;
   personName: string;
   goods: Good[];
   isDelivery: boolean;
-};
+}
 
 export type OrderCommonInfo = {
   title: string;

@@ -1,0 +1,1 @@
+export { CreateNewGood } from './CreateNewGood';

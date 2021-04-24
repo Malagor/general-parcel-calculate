@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useEffect } from 'react';
 import { useAppStore } from 'store/appContext';
 import { useObserver } from 'mobx-react-lite';
 import { ParcelInput, ParcelWrapper } from './styled';
@@ -6,14 +6,6 @@ import { ParcelInput, ParcelWrapper } from './styled';
 type ParcelCostProps = {};
 
 export const ParcelCost: FC<ParcelCostProps> = () => {
-  // const {
-  //   orderInfo: {
-  //     parcelCost,
-  //     currency: { name: currencyCode },
-  //   },
-  //   setParcelCost,
-  // } = useAppStore();
-
   const store = useAppStore();
 
   const onChangeHandler = useCallback(
@@ -26,6 +18,21 @@ export const ParcelCost: FC<ParcelCostProps> = () => {
     [store]
   );
 
+  const countTotalParcelCost = useCallback(() => {
+    const ordersCost = store.personalOrders.reduce(
+      (orderSum, order) =>
+        orderSum +
+        order.goods.reduce((sum, good) => sum + good.price * good.count, 0),
+      0
+    );
+
+    store.setParcelCost(ordersCost);
+  }, [store]);
+
+  useEffect(() => {
+    countTotalParcelCost();
+  }, [countTotalParcelCost]);
+
   return useObserver(() => (
     <ParcelWrapper>
       Стоимость посылки
@@ -33,7 +40,7 @@ export const ParcelCost: FC<ParcelCostProps> = () => {
         value={store.orderInfo.parcelCost || ''}
         onChange={onChangeHandler}
       />
-      <div>{store.orderInfo.currency.name}</div>
+      <div>{store.orderInfo.currency.code}</div>
     </ParcelWrapper>
   ));
 };
