@@ -11,6 +11,7 @@ export interface PersonalOrder {
   personName: string;
   goods: Good[];
   isDelivery: boolean;
+  personalDeliveryCost: number;
 }
 
 export type OrderCommonInfo = {
@@ -24,20 +25,3 @@ export type OrderCommonInfo = {
   deliveryCost: number;
   generalCostInBYN: number;
 };
-
-export interface Store {
-  id: string;
-  orderInfo: OrderCommonInfo;
-  personalOrders: PersonalOrder[];
-
-  setOrderTitle(title: string): void;
-  setCurrencyCode(code: string): void;
-  setCurrencyRate(rate: number): void;
-  setParcelCost(parcelCost: number): void;
-  setDeliveryCost(deliveryCost: number): void;
-  setGeneralCostInBYN(costInBYN: number): void;
-  addPerson(personData: PersonalOrder): void;
-  addGood(personId: string, good: Good): void;
-  deletePerson(personId: string): void;
-  deleteGood(personId: string, goodId: string): void;
-}

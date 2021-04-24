@@ -31,6 +31,7 @@ class OrderStore {
         id: '1',
         personName: 'Kate',
         isDelivery: true,
+        personalDeliveryCost: 0,
         goods: [
           {
             id: '1',
@@ -52,6 +53,7 @@ class OrderStore {
         id: '2',
         personName: 'Анастасия',
         isDelivery: true,
+        personalDeliveryCost: 0,
         goods: [
           {
             id: '1',
@@ -74,6 +76,7 @@ class OrderStore {
         id: '3',
         personName: 'Кирилл',
         isDelivery: true,
+        personalDeliveryCost: 0,
         goods: [
           {
             id: '1',
@@ -115,6 +118,42 @@ class OrderStore {
 
   setDeliveryCost(deliveryCost: number): void {
     this.orderInfo.deliveryCost = deliveryCost;
+  }
+
+  setPersonalDeliveryCost(orderId: string, cost: number): void {
+    const orderIndex = this.personalOrders.findIndex(
+      (order) => order.id === orderId
+    );
+
+    this.personalOrders[orderIndex].personalDeliveryCost = cost;
+  }
+
+  calculateDeliveryCost(): void {
+    const { deliveryCost } = this.orderInfo;
+
+    const totalWithDeliveryOnly = this.personalOrders.reduce(
+      (orderSum, order) =>
+        order.isDelivery
+          ? orderSum +
+            order.goods.reduce((sum, good) => sum + good.price * good.count, 0)
+          : orderSum,
+      0
+    );
+
+    const coeficient = deliveryCost / totalWithDeliveryOnly;
+
+    this.personalOrders.forEach((order) => {
+      if (order.isDelivery) {
+        const total = order.goods.reduce(
+          (sum, good) => sum + good.count * good.price,
+          0
+        );
+
+        this.setPersonalDeliveryCost(order.id, total * coeficient);
+      } else {
+        this.setPersonalDeliveryCost(order.id, 0);
+      }
+    });
   }
 
   setGeneralCostInBYN(costInBYN: number): void {

@@ -8,10 +8,11 @@ import {
   DeliveryCheckbox,
   OrderHeader,
   OrderList,
+  OrderPersonName,
   OrderWrapper,
   TotalPrice,
 } from './styled';
-import { GoodInfo, CreateNewGood } from './components';
+import { GoodInfo, CreateNewGood, ListHeader } from './components';
 
 interface OrderProps {
   order: PersonalOrder;
@@ -19,6 +20,7 @@ interface OrderProps {
 
 export const Order: FC<OrderProps> = observer(({ order }) => {
   const [total, setTotal] = useState(0);
+
   const countTotalPrice = useCallback(
     (orderList: PersonalOrder) =>
       orderList.goods.reduce((sum, good) => sum + good.price * good.count, 0),
@@ -33,29 +35,43 @@ export const Order: FC<OrderProps> = observer(({ order }) => {
     setTotal(countTotalPrice(order));
   }, [order, countTotalPrice]);
 
-  useEffect(() => {
+  const onChangeOrders = useCallback(() => {
     setTotalOrderCost();
+    // calculateDelivery();
   }, [setTotalOrderCost]);
+
+  useEffect(() => {
+    onChangeOrders();
+  }, [onChangeOrders]);
 
   return (
     <OrderWrapper>
       <OrderHeader>
-        {order.personName}
+        <OrderPersonName>{order.personName}</OrderPersonName>
         <div>
-          Доставка
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+          <label htmlFor="del">Доставлять</label>
           <DeliveryCheckbox
+            id="del"
             checked={order.isDelivery}
             onChange={() => store.toggleDelivery(order.id)}
           />
         </div>
-        <div>
+        <div style={{ display: 'flex', gap: '8px' }}>
           Сумма
           <TotalPrice>{total}</TotalPrice>
+          {store.orderInfo.currency.code}
         </div>
-        <div>Доставка</div>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          Доставка
+          <div>{order.personalDeliveryCost.toFixed(2)}</div>
+          {store.orderInfo.currency.code}
+        </div>
+
         <Button onClick={() => onDeleteOrder(order.id)}>-</Button>
       </OrderHeader>
       <OrderList>
+        <ListHeader />
         <List
           items={order.goods}
           renderItem={(item: Good) => (
@@ -63,11 +79,11 @@ export const Order: FC<OrderProps> = observer(({ order }) => {
               orderId={order.id}
               item={item}
               key={item.title}
-              onDelete={setTotalOrderCost}
+              onDelete={onChangeOrders}
             />
           )}
         />
-        <CreateNewGood orderId={order.id} onCreate={setTotalOrderCost} />
+        <CreateNewGood orderId={order.id} onCreate={onChangeOrders} />
       </OrderList>
     </OrderWrapper>
   );

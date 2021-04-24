@@ -9,6 +9,7 @@ import {
   GoodLink,
   GoodPrice,
   GoodTitle,
+  ButtonWrapper,
 } from './styled';
 
 type GoodInfoProps = {
@@ -32,7 +33,9 @@ export const GoodInfo: FC<GoodInfoProps> = observer(
         </GoodLink>
         <GoodPrice>{item.price}</GoodPrice>
         <GoodCount>{item.count}</GoodCount>
-        <Button onClick={() => onDeleteHandle()}>-</Button>
+        <ButtonWrapper>
+          <Button onClick={() => onDeleteHandle()}>-</Button>
+        </ButtonWrapper>
       </GoodInfoWrapper>
     );
   }

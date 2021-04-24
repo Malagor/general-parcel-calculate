@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { observer } from 'mobx-react-lite';
 import store from 'store/OrderStore';
-import { OrderWrapper } from './styled';
+import { OrderInfoWrapper } from './styled';
 import {
   OrderTitle,
   OrderDate,
@@ -14,19 +14,19 @@ import {
 
 export const OrderInfo: FC = observer(() => {
   store.calculateParcelTotalCost();
+  store.calculateDeliveryCost();
   return (
-    <OrderWrapper>
+    <OrderInfoWrapper>
       <OrderTitle />
       <OrderDate data={store.orderInfo.date} />
       <Currency />
       <ParcelCost
         currency={store.orderInfo.currency.code}
-        // cost={countTotalParcelCost(store.personalOrders)}
         cost={store.orderInfo.parcelCost}
       />
       <DeliveryCost />
       <BYNCost />
       <PersonList />
-    </OrderWrapper>
+    </OrderInfoWrapper>
   );
 });

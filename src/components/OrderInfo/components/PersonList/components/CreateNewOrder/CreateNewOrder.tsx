@@ -2,7 +2,6 @@ import React, { ChangeEvent, FC, useState } from 'react';
 import store from 'store/OrderStore';
 import { Button } from 'generalStyled';
 import { PersonalOrder } from 'types';
-import { nanoid } from 'nanoid';
 import { COLOR_BLUE } from 'appConstants';
 import { observer } from 'mobx-react-lite';
 import { CreateOrderWrapper } from './styled';
@@ -19,8 +18,9 @@ export const CreateNewOrder: FC<CreateNewOrderProps> = observer(() => {
   const newOrder = (personName: string) => {
     const order: PersonalOrder = {
       goods: [],
-      id: nanoid(),
+      id: '',
       isDelivery: true,
+      personalDeliveryCost: 0,
       personName,
     };
     store.addPerson(order);

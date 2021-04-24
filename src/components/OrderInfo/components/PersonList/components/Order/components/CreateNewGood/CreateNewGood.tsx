@@ -2,7 +2,6 @@ import React, { FC, RefObject, useRef, useState } from 'react';
 import { Button } from 'generalStyled';
 import store from 'store/OrderStore';
 import { Good } from 'types';
-import { nanoid } from 'nanoid';
 import { COLOR_BLUE } from 'appConstants';
 import { observer } from 'mobx-react-lite';
 import {
@@ -31,13 +30,14 @@ export const CreateNewGood: FC<CreateNewGoodProps> = observer(
       if (title && price && count) {
         const good: Good = {
           count,
-          id: nanoid(),
+          id: '',
           link,
           price,
           title,
         };
         store.addGood(orderId, good);
         store.calculateParcelTotalCost();
+        store.calculateDeliveryCost();
         onCreate();
 
         setCount(0);
