@@ -1,9 +1,9 @@
 import React, { ChangeEvent, FC, useState } from 'react';
-import { useAppStore } from 'store/appContext';
 import { Button } from 'generalStyled';
 import { COLOR_BLUE, COLOR_PINK, ROUNDING_COEFFICIENT } from 'appConstants';
 import { getCurrencyByCode } from 'services/currencyAPI';
-import { useObserver } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
+import store from 'store/OrderStore';
 import {
   CurrencyInput,
   CurrencyWrapper,
@@ -14,8 +14,7 @@ import {
 
 type ParcelCostProps = {};
 
-export const Currency: FC<ParcelCostProps> = () => {
-  const store = useAppStore();
+export const Currency: FC<ParcelCostProps> = observer(() => {
   const [error, setError] = useState('');
 
   const calculateRate = () => {
@@ -53,7 +52,7 @@ export const Currency: FC<ParcelCostProps> = () => {
     }
   };
 
-  return useObserver(() => (
+  return (
     <CurrencyWrapper>
       Валюта магазина
       <CurrencyInput
@@ -72,5 +71,5 @@ export const Currency: FC<ParcelCostProps> = () => {
       </ButtonBlock>
       <CurrencyError>{error}</CurrencyError>
     </CurrencyWrapper>
-  ));
-};
+  );
+});

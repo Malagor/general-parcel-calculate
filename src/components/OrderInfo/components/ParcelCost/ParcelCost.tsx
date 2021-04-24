@@ -1,22 +1,17 @@
 import React, { FC, useCallback, useEffect } from 'react';
-import { useAppStore } from 'store/appContext';
-import { useObserver } from 'mobx-react-lite';
+import store from 'store/OrderStore';
+import { observer } from 'mobx-react-lite';
 import { ParcelInput, ParcelWrapper } from './styled';
 
 type ParcelCostProps = {};
 
-export const ParcelCost: FC<ParcelCostProps> = () => {
-  const store = useAppStore();
-
-  const onChangeHandler = useCallback(
-    (e) => {
-      const newCost = +e.target.value;
-      if (!isNaN(newCost)) {
-        store.setParcelCost(+e.target.value);
-      }
-    },
-    [store]
-  );
+export const ParcelCost: FC<ParcelCostProps> = observer(() => {
+  const onChangeHandler = useCallback((e) => {
+    const newCost = +e.target.value;
+    if (!isNaN(newCost)) {
+      store.setParcelCost(+e.target.value);
+    }
+  }, []);
 
   const countTotalParcelCost = useCallback(() => {
     const ordersCost = store.personalOrders.reduce(
@@ -27,13 +22,13 @@ export const ParcelCost: FC<ParcelCostProps> = () => {
     );
 
     store.setParcelCost(ordersCost);
-  }, [store]);
+  }, []);
 
   useEffect(() => {
     countTotalParcelCost();
   }, [countTotalParcelCost]);
 
-  return useObserver(() => (
+  return (
     <ParcelWrapper>
       Стоимость посылки
       <ParcelInput
@@ -42,5 +37,5 @@ export const ParcelCost: FC<ParcelCostProps> = () => {
       />
       <div>{store.orderInfo.currency.code}</div>
     </ParcelWrapper>
-  ));
-};
+  );
+});

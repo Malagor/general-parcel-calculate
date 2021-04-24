@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
-import { useObserver } from 'mobx-react-lite';
-import { useAppStore } from 'store/appContext';
+import { observer } from 'mobx-react-lite';
+import store from 'store/OrderStore';
 import { OrderWrapper } from './styled';
 import {
   OrderTitle,
@@ -12,18 +12,14 @@ import {
   PersonList,
 } from './components';
 
-export const OrderInfo: FC = () => {
-  const { orderInfo } = useAppStore();
-
-  return useObserver(() => (
-    <OrderWrapper>
-      <OrderTitle />
-      <OrderDate data={orderInfo.date} />
-      <Currency />
-      <ParcelCost />
-      <DeliveryCost />
-      <BYNCost />
-      <PersonList />
-    </OrderWrapper>
-  ));
-};
+export const OrderInfo: FC = observer(() => (
+  <OrderWrapper>
+    <OrderTitle />
+    <OrderDate data={store.orderInfo.date} />
+    <Currency />
+    <ParcelCost />
+    <DeliveryCost />
+    <BYNCost />
+    <PersonList />
+  </OrderWrapper>
+));

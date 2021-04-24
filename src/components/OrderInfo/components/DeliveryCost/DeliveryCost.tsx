@@ -1,23 +1,18 @@
-import React, { ChangeEvent, FC, useCallback } from 'react';
-import { useAppStore } from 'store/appContext';
-import { useObserver } from 'mobx-react-lite';
+import React, { ChangeEvent, FC } from 'react';
+import { observer } from 'mobx-react-lite';
+import store from 'store/OrderStore';
 import { DeliveryInput, DeliveryWrapper } from './styled';
 
 type ParcelCostProps = {};
 
-export const DeliveryCost: FC<ParcelCostProps> = () => {
-  const store = useAppStore();
+export const DeliveryCost: FC<ParcelCostProps> = observer(() => {
+  const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!isNaN(+e.target.value)) {
+      store.setDeliveryCost(+e.target.value);
+    }
+  };
 
-  const onChangeHandler = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (!isNaN(+e.target.value)) {
-        store.setDeliveryCost(+e.target.value);
-      }
-    },
-    [store]
-  );
-
-  return useObserver(() => (
+  return (
     <DeliveryWrapper>
       Стоимость доставки
       <DeliveryInput
@@ -26,5 +21,5 @@ export const DeliveryCost: FC<ParcelCostProps> = () => {
       />
       <div>{store.orderInfo.currency.code}</div>
     </DeliveryWrapper>
-  ));
-};
+  );
+});

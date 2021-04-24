@@ -1,9 +1,10 @@
 import React, { FC, RefObject, useRef, useState } from 'react';
 import { Button } from 'generalStyled';
-import { useAppStore } from 'store/appContext';
+import store from 'store/OrderStore';
 import { Good } from 'types';
 import { nanoid } from 'nanoid';
 import { COLOR_BLUE } from 'appConstants';
+import { observer } from 'mobx-react-lite';
 import {
   NewGoodWrapper,
   CountInput,
@@ -16,9 +17,7 @@ type CreateNewGoodProps = {
   orderId: string;
 };
 
-export const CreateNewGood: FC<CreateNewGoodProps> = ({ orderId }) => {
-  const state = useAppStore();
-
+export const CreateNewGood: FC<CreateNewGoodProps> = observer(({ orderId }) => {
   const [title, setTitle] = useState('');
   const [link, setLink] = useState('');
   const [price, setPrice] = useState(0);
@@ -35,7 +34,7 @@ export const CreateNewGood: FC<CreateNewGoodProps> = ({ orderId }) => {
         price,
         title,
       };
-      state.addGood(orderId, good);
+      store.addGood(orderId, good);
       setCount(0);
       setPrice(0);
       setTitle('');
@@ -79,4 +78,4 @@ export const CreateNewGood: FC<CreateNewGoodProps> = ({ orderId }) => {
       </Button>
     </NewGoodWrapper>
   );
-};
+});

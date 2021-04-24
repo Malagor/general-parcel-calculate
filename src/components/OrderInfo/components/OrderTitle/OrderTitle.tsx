@@ -1,16 +1,15 @@
 import React, { ChangeEvent, FC } from 'react';
-import { useAppStore } from 'store/appContext';
-import { useObserver } from 'mobx-react-lite';
+import { observer } from 'mobx-react-lite';
+import store from 'store/OrderStore';
 import { OrderTitleWrapper, Title } from './styled';
 
-export const OrderTitle: FC = () => {
-  const store = useAppStore();
+export const OrderTitle: FC = observer(() => {
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     store.setOrderTitle(val);
   };
 
-  return useObserver(() => (
+  return (
     <OrderTitleWrapper>
       <Title
         value={store.orderInfo.title}
@@ -18,5 +17,5 @@ export const OrderTitle: FC = () => {
         placeholder="Заголовок заказа"
       />
     </OrderTitleWrapper>
-  ));
-};
+  );
+});
